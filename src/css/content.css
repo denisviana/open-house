@@ -1,0 +1,17 @@
+.content{
+    margin-top: 40px;
+    padding-left: 20px;
+    padding-right: 20px;
+}
+
+.img-content-card{
+    padding: 20px;
+}
+
+.card-main{
+}
+
+.card-button{
+    color: white;
+    font-weight: 600;
+}
