@@ -14,6 +14,7 @@ import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem'
 import ListItemText from '@material-ui/core/ListItemText';
 import FirebaseService from '../services/FirebaseServices';
+import Image from 'material-ui-image';
 
 
 class Home extends Component{
@@ -61,19 +62,15 @@ class Home extends Component{
         this.state.items.map((item, index) => 
             itemChilds.push(
             <Grid item xs='8' sm='5' lg='3' md='4' key={item.key}>
-                <Card style={{borderRadius: 40}}>
+                <Card style={{borderRadius: 5}}>
 
                     <CardActionArea
                     disableRipple='true'
                     disableTouchRipple='true'
                     disabled='true'>
 
-                    <CardMedia
-                    component="img"
-                    classes={{objectFit: 'cover'}}
-                    height="250"
-                    style={styles.media}
-                    image={item.imageUrl}>
+                    <CardMedia style={{padding: 16}}>
+                    <Image  src={item.imageUrl}/>
                     </CardMedia>
 
                     <CardContent>

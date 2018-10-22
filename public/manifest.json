@@ -1,6 +1,6 @@
 {
-  "short_name": "React App",
-  "name": "Create React App Sample",
+  "short_name": "Open House",
+  "name": "Open House - Denis&Malu",
   "icons": [
     {
       "src": "favicon.ico",
@@ -10,6 +10,6 @@
   ],
   "start_url": ".",
   "display": "standalone",
-  "theme_color": "#d69600",
+  "theme_color": "#ffb300",
   "background_color": "#ffffff"
 }
