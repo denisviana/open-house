@@ -22,6 +22,7 @@ import DialogContent from '@material-ui/core/DialogContent';
 import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import Slide from '@material-ui/core/Slide';
+import CartActions from '../actions/CartActions';
 
 
 function Transition(props) {
@@ -37,7 +38,6 @@ class Home extends Component {
             items: [],
             openDialog: false,
             itemSelected: '',
-            width: this.props
         };
     }
     
@@ -72,14 +72,25 @@ class Home extends Component {
             this.setState({ items: dataReceived }))
     }
 
+    addProductToCart(item){
+
+        var update = {
+            name : 'name'
+        }
+
+        CartActions.addToCart(item,update);
+        CartActions.updateCartVisible(true);
+    }
+
     updateUi = () => {
 
         let itemChilds = [];
+        const { width } = this.props;
 
-        console.log(this.state.width);
+        console.log(width);
 
         this.state.items.map((item, index) => {
-            if (this.state.width == 'xs') {
+            if (width == 'xs') {
                 itemChilds.push(
                     <Grid item xs='12' sm='5' lg='3' md='4' key={item.key}>
                         <Card style={{
@@ -134,7 +145,7 @@ class Home extends Component {
                             </CardActionArea>
 
                             <CardActions style={{ justifyContent: 'center', marginBottom: '10px' }}>
-                                <PrimaryButton variant="contained" onClick={() => this.handleClickOpenDialog(item.title)} label="Selecionar" />
+                                <PrimaryButton variant="contained" onClick={() => this.addProductToCart(item)} label="Selecionar" />
                                 <SecondaryButton label="Ver loja" />
                             </CardActions>
                         </Card>
@@ -192,7 +203,7 @@ class Home extends Component {
                     direction="row" 
                     alignItems="center"
                     justify="center"
-                    style={{ paddingTop: 15, height:'100%' }}>
+                    style={{ paddingTop: 15}}>
 
                     <Grid item xs='12' lg='8'>
                         <Grid container
@@ -218,7 +229,7 @@ class Home extends Component {
                         <DialogTitle id="alert-dialog-title">{"Selecionar item"}</DialogTitle>
                         <DialogContent>
                         <DialogContentText id="alert-dialog-description">
-                            Tem certeza que deseja selecionar o item {this.state.itemSelected}? Uma vez selecionado, o item será removido da lista.
+                            Tem certeza que deseja selecionar o item <b>{this.state.itemSelected}</b>? Uma vez selecionado, o item será removido da lista.
                         </DialogContentText>
                         </DialogContent>
                         <DialogActions>
