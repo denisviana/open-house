@@ -37,6 +37,7 @@ class Home extends Component {
             items: [],
             openDialog: false,
             itemSelected: '',
+            width: this.props
         };
     }
     
@@ -58,7 +59,6 @@ class Home extends Component {
       };
     
     handleCloseDialog = () => {
-        console.log("Fechando dialog");
         this.setState({ openDialog: false });
     };
 
@@ -74,12 +74,12 @@ class Home extends Component {
 
     updateUi = () => {
 
-        const { width } = this.props;
-
         let itemChilds = [];
 
+        console.log(this.state.width);
+
         this.state.items.map((item, index) => {
-            if (width == 'xs') {
+            if (this.state.width == 'xs') {
                 itemChilds.push(
                     <Grid item xs='12' sm='5' lg='3' md='4' key={item.key}>
                         <Card style={{
@@ -189,13 +189,20 @@ class Home extends Component {
                 </Popover>
 
                 <Grid container
-                    spacing={8}
                     direction="row" 
                     alignItems="center"
                     justify="center"
-                    style={{ paddingTop: 15 }}>
+                    style={{ paddingTop: 15, height:'100%' }}>
 
-                    {this.updateUi()}
+                    <Grid item xs='12' lg='8'>
+                        <Grid container
+                        spacing={16}
+                        direction="row" 
+                        alignItems="center"
+                        justify="center">
+                            {this.updateUi()}
+                        </Grid>
+                    </Grid>
 
                 </Grid>
 
