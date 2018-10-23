@@ -8,7 +8,7 @@ const styles = theme => ({
     "&:hover" : {
       background: "none"
     },
-    borderRadius: 50,
+    borderRadius: 10,
     borderColor: "#ffb300",
     color: '#ffb300',
     height: 35,
@@ -24,7 +24,7 @@ class SecondaryButton extends Component{
 
   render(){
     const { classes } = this.props;
-    return <Button classes={{ root: classes.root, label: classes.label }} style={this.props.style}  variant="outlined">{this.props.label}</Button>;
+    return <Button classes={{ root: classes.root, label: classes.label }} onClick={this.props.onClick} style={this.props.style}  variant="outlined">{this.props.label}</Button>;
   }
 }
 

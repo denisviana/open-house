@@ -16,7 +16,17 @@ import ListItemText from '@material-ui/core/ListItemText';
 import FirebaseService from '../services/FirebaseServices';
 import Image from 'material-ui-image';
 import withWidth from '@material-ui/core/withWidth';
+import Dialog from '@material-ui/core/Dialog';
+import DialogActions from '@material-ui/core/DialogActions';
+import DialogContent from '@material-ui/core/DialogContent';
+import DialogContentText from '@material-ui/core/DialogContentText';
+import DialogTitle from '@material-ui/core/DialogTitle';
+import Slide from '@material-ui/core/Slide';
 
+
+function Transition(props) {
+    return <Slide direction="up" {...props} />;
+}
 
 class Home extends Component {
 
@@ -25,8 +35,11 @@ class Home extends Component {
         this.state = {
             anchorEl: null,
             items: [],
+            openDialog: false,
+            itemSelected: '',
         };
     }
+    
 
     handleClick = event => {
         this.setState({
@@ -40,9 +53,18 @@ class Home extends Component {
         });
     };
 
+    handleClickOpenDialog = (title) => {
+        this.setState({ openDialog: true, itemSelected : title });
+      };
+    
+    handleCloseDialog = () => {
+        console.log("Fechando dialog");
+        this.setState({ openDialog: false });
+    };
+
     getItemById(id) {
         FirebaseService.getItemById('products', id, (dataReceived) =>
-            console.log(dataReceived))
+            console.log(dataReceived['isSelected']))
     }
 
     componentDidMount() {
@@ -59,7 +81,7 @@ class Home extends Component {
         this.state.items.map((item, index) => {
             if (width == 'xs') {
                 itemChilds.push(
-                    <Grid item xs='10' sm='5' lg='3' md='4' key={item.key}>
+                    <Grid item xs='12' sm='5' lg='3' md='4' key={item.key}>
                         <Card style={{
                             borderRadius: 5, display: 'flex', direction: "row",
                             alignItems: "center",
@@ -81,8 +103,8 @@ class Home extends Component {
                                     </CardContent>
                                 </CardActionArea>
                                 <CardActions style={{ justifyContent: 'left' }}>
-                                    <PrimaryButton variant="contained" onClick={() => this.getItemById(item.key)} label="Selecionar" />
-                                    <SecondaryButton label="Loja" />
+                                    <PrimaryButton variant="contained" onClick={() => this.handleClickOpenDialog(item.title)} label="Selecionar" />
+                                    <SecondaryButton label="Loja" style={{marginRight:10}} />
                                 </CardActions>
                             </div>
                         </Card>
@@ -112,7 +134,7 @@ class Home extends Component {
                             </CardActionArea>
 
                             <CardActions style={{ justifyContent: 'center', marginBottom: '10px' }}>
-                                <PrimaryButton variant="contained" onClick={() => this.getItemById(item.key)} label="Selecionar" />
+                                <PrimaryButton variant="contained" onClick={() => this.handleClickOpenDialog(item.title)} label="Selecionar" />
                                 <SecondaryButton label="Ver loja" />
                             </CardActions>
                         </Card>
@@ -121,10 +143,10 @@ class Home extends Component {
             }
         }
         );
-
-
         return itemChilds;
     }
+
+
 
     render() {
 
@@ -167,8 +189,8 @@ class Home extends Component {
                 </Popover>
 
                 <Grid container
-                    spacing={16}
-                    direction="row"
+                    spacing={8}
+                    direction="row" 
                     alignItems="center"
                     justify="center"
                     style={{ paddingTop: 15 }}>
@@ -176,6 +198,28 @@ class Home extends Component {
                     {this.updateUi()}
 
                 </Grid>
+
+
+                <Dialog
+                    TransitionComponent={Transition}
+                    keepMounted
+                    open={this.state.openDialog}
+                    onClose={this.handleCloseDialog}
+                    aria-labelledby="alert-dialog-title"
+                    aria-describedby="alert-dialog-description"
+                    >
+                        <DialogTitle id="alert-dialog-title">{"Selecionar item"}</DialogTitle>
+                        <DialogContent>
+                        <DialogContentText id="alert-dialog-description">
+                            Tem certeza que deseja selecionar o item {this.state.itemSelected}? Uma vez selecionado, o item será removido da lista.
+                        </DialogContentText>
+                        </DialogContent>
+                        <DialogActions>
+                            <PrimaryButton label="Sim, tenho certeza." />
+                            <SecondaryButton label="Escolher outro." onClick={() => this.handleCloseDialog()}/>
+                    </DialogActions>
+                </Dialog>
+
             </div>
         )
     }

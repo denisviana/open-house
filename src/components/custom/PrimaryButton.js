@@ -8,7 +8,7 @@ const styles = theme => ({
     "&:hover" : {
       background: "#d69600"
     },
-    borderRadius: 50,
+    borderRadius: 10,
     border: 0,
     color: 'white',
     height: 35,
@@ -30,6 +30,7 @@ class PrimaryButton extends Component {
       type={this.props.type} 
       raised={true} 
       style={this.props.style} 
+      onClick={this.props.onClick}
       classes={{ root: classes.root, label: classes.label }}
       >{this.props.label}
     </Button>; 
