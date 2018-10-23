@@ -1,4 +1,4 @@
-import React, {Component} from 'react'
+import React, { Component } from 'react'
 import Card from '@material-ui/core/Card';
 import CardActionArea from '@material-ui/core/CardActionArea';
 import CardActions from '@material-ui/core/CardActions';
@@ -15,11 +15,12 @@ import ListItem from '@material-ui/core/ListItem'
 import ListItemText from '@material-ui/core/ListItemText';
 import FirebaseService from '../services/FirebaseServices';
 import Image from 'material-ui-image';
+import withWidth from '@material-ui/core/withWidth';
 
 
-class Home extends Component{
+class Home extends Component {
 
-    constructor(props){
+    constructor(props) {
         super(props);
         this.state = {
             anchorEl: null,
@@ -29,73 +30,103 @@ class Home extends Component{
 
     handleClick = event => {
         this.setState({
-          anchorEl: event.currentTarget,
+            anchorEl: event.currentTarget,
         });
     };
 
     handleClose = () => {
         this.setState({
-          anchorEl: null,
+            anchorEl: null,
         });
     };
 
-    getItemById(id){
-        FirebaseService.getItemById('products',id,(dataReceived) => 
-        console.log(dataReceived))
+    getItemById(id) {
+        FirebaseService.getItemById('products', id, (dataReceived) =>
+            console.log(dataReceived))
     }
 
-    componentDidMount(){
-        FirebaseService.getDataList('products', (dataReceived) => 
-        this.setState({items : dataReceived}))
+    componentDidMount() {
+        FirebaseService.getDataList('products', (dataReceived) =>
+            this.setState({ items: dataReceived }))
     }
 
     updateUi = () => {
 
-        const styles = {
-            media: {
-                backgroundColor : "#fff"
-            }
-        };
-        
+        const { width } = this.props;
+
         let itemChilds = [];
 
-        this.state.items.map((item, index) => 
-            itemChilds.push(
-            <Grid item xs='8' sm='5' lg='3' md='4' key={item.key}>
-                <Card style={{borderRadius: 5}}>
+        this.state.items.map((item, index) => {
+            if (width == 'xs') {
+                itemChilds.push(
+                    <Grid item xs='10' sm='5' lg='3' md='4' key={item.key}>
+                        <Card style={{
+                            borderRadius: 5, display: 'flex', direction: "row",
+                            alignItems: "center",
+                            justify: "center"
+                        }}>
+                            <CardMedia style={{ width: '100%', padding: 5 }}>
+                                <Image src={item.imageUrl} />
+                            </CardMedia>
+                            <div style={{ displa: 'flex', flexDirection: 'column' }}>
+                                <CardActionArea style={{ flex: '1 0 auto' }}
+                                    disableRipple='true'
+                                    disableTouchRipple='true'
+                                    disabled='true'>
+                                    <CardContent>
+                                        <Typography component="h3" variant="h7" align='left'>{item.title}</Typography>
+                                        <Typography component="p" align='left' style={{ color: '#5d5d5d' }}>
+                                            Preço médio: <span style={{ fontWeight: 600, color: '#ffb300' }}>{item.price}</span>
+                                        </Typography>
+                                    </CardContent>
+                                </CardActionArea>
+                                <CardActions style={{ justifyContent: 'left' }}>
+                                    <PrimaryButton variant="contained" onClick={() => this.getItemById(item.key)} label="Selecionar" />
+                                    <SecondaryButton label="Loja" />
+                                </CardActions>
+                            </div>
+                        </Card>
+                    </Grid>
+                )
+            } else {
+                itemChilds.push(
+                    <Grid item xs='10' sm='5' lg='3' md='4' key={item.key}>
+                        <Card style={{ borderRadius: 5 }}>
 
-                    <CardActionArea
-                    disableRipple='true'
-                    disableTouchRipple='true'
-                    disabled='true'>
+                            <CardActionArea
+                                disableRipple='true'
+                                disableTouchRipple='true'
+                                disabled='true'>
 
-                    <CardMedia style={{padding: 16}}>
-                    <Image  src={item.imageUrl}/>
-                    </CardMedia>
+                                <CardMedia style={{ padding: 16 }}>
+                                    <Image src={item.imageUrl} />
+                                </CardMedia>
 
-                    <CardContent>
-                        <Typography component="h2" variant="h6">{item.title}</Typography>
-                        <Typography component="p" style={{color:'#5d5d5d'}}>
-                            Preço médio: <span style={{fontWeight: 600, color: '#ffb300'}}>{item.price}</span>
-                        </Typography>
-                    </CardContent>
+                                <CardContent>
+                                    <Typography component="h2" variant="h6">{item.title}</Typography>
+                                    <Typography component="p" style={{ color: '#5d5d5d' }}>
+                                        Preço médio: <span style={{ fontWeight: 600, color: '#ffb300' }}>{item.price}</span>
+                                    </Typography>
+                                </CardContent>
 
-                    </CardActionArea>
+                            </CardActionArea>
 
-                    <CardActions style={{justifyContent: 'center', marginBottom: '10px'}}>
-                        <PrimaryButton variant="contained" onClick={ () => this.getItemById(item.key) } label="Selecionar"/>
-                        <SecondaryButton label="Ver loja"/>
-                    </CardActions>
-                </Card>
-            </Grid>
-            )
+                            <CardActions style={{ justifyContent: 'center', marginBottom: '10px' }}>
+                                <PrimaryButton variant="contained" onClick={() => this.getItemById(item.key)} label="Selecionar" />
+                                <SecondaryButton label="Ver loja" />
+                            </CardActions>
+                        </Card>
+                    </Grid>
+                )
+            }
+        }
         );
-    
-    
+
+
         return itemChilds;
     }
 
-    render(){
+    render() {
 
         const { anchorEl } = this.state;
         const open = Boolean(anchorEl);
@@ -103,10 +134,10 @@ class Home extends Component{
         return (
             <div className="content">
 
-                <SortButton float="right" label='Ordenar' icon='fas fa-sort-amount-up' 
-                aria-haspopup="true"
-                aria-owns={open ? 'simple-popper' : null}
-                onClick={this.handleClick}/>
+                <SortButton float="right" label='Ordenar' icon='fas fa-sort-amount-up'
+                    aria-haspopup="true"
+                    aria-owns={open ? 'simple-popper' : null}
+                    onClick={this.handleClick} />
 
                 <Popover
                     id="simple-popper"
@@ -121,28 +152,28 @@ class Home extends Component{
                         vertical: 'top',
                         horizontal: 'center',
                     }}
-                    >
+                >
                     <List component="nav">
                         <ListItem button>
-                            <ListItemText primary="Ordem Alfabética"/>
+                            <ListItemText primary="Ordem Alfabética" />
                         </ListItem>
                         <ListItem button>
-                            <ListItemText primary="Menor Preço"/>
+                            <ListItemText primary="Menor Preço" />
                         </ListItem>
                         <ListItem button>
-                            <ListItemText primary="Maior Preço"/>
+                            <ListItemText primary="Maior Preço" />
                         </ListItem>
                     </List>
                 </Popover>
 
-                <Grid container 
-                spacing={32}
-                direction="row"
-                alignItems="center"
-                justify="center"
-                style={{paddingTop:15}}>
+                <Grid container
+                    spacing={16}
+                    direction="row"
+                    alignItems="center"
+                    justify="center"
+                    style={{ paddingTop: 15 }}>
 
-                   {this.updateUi()}
+                    {this.updateUi()}
 
                 </Grid>
             </div>
@@ -150,4 +181,4 @@ class Home extends Component{
     }
 }
 
-export default Home;
+export default withWidth()(Home);

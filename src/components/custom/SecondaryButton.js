@@ -1,10 +1,8 @@
-import React from 'react';
+import React, { Component } from 'react';
 import { withStyles } from '@material-ui/core/styles';
 import Button from '@material-ui/core/Button';
 
-// The `withStyles()` higher-order component is injecting a `classes`
-// property that is used by the `Button` component.
-const StyledButton = withStyles({
+const styles = theme => ({
   root: {
     background: 'none',
     "&:hover" : {
@@ -16,15 +14,18 @@ const StyledButton = withStyles({
     height: 35,
     padding: '0 10px',
     fontWeight: 700,
-    marginLeft: 10,
-    marginRight: 10
   },
   label: {
     textTransform: 'capitalize',
   },
-})(Button);
+});
 
-export default function SecondaryButton(props) {
+class SecondaryButton extends Component{
 
-  return <StyledButton variant="outlined">{props.label}</StyledButton>;
+  render(){
+    const { classes } = this.props;
+    return <Button classes={{ root: classes.root, label: classes.label }} style={this.props.style}  variant="outlined">{this.props.label}</Button>;
+  }
 }
+
+export default withStyles(styles)(SecondaryButton);
