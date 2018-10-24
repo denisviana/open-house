@@ -60,6 +60,13 @@ class Navbar extends Component{
         this.setState({itemsCart : [], counter : 0})
         this.setState({ openConfirmCartDialog: false });
         this.setState({ openDialog: false });
+
+        let confirmCart = {
+            targetEmail : "denis.costa@snowmanlabs.com"
+        }
+
+        FirebaseService.confirmItemsSelecteds('productsByEmail',confirmCart);
+
     }
 
     openPopup = event => {

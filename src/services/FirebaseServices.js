@@ -76,9 +76,16 @@ export default class FirebaseService {
         return id;
     };
 
+    static confirmItemsSelecteds = (nodePath,confirmCart) => {
+        const ref = firebaseDatabase.ref(nodePath).push();
+        const id = firebaseDatabase.ref(nodePath).push().key;
+        ref.set(confirmCart);
+        return id;
+    };
+
     static updateStateItem = (node, id, state) => {
         const ref = firebaseDatabase.ref(node + '/' + id);
         ref.update({available : state})
-    }
+    };
 
 }
