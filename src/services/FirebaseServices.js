@@ -34,4 +34,9 @@ export default class FirebaseService {
         return id;
     };
 
+    static updateStateItem = (node, id, state) => {
+        const ref = firebaseDatabase.ref(node + '/' + id);
+        ref.update({isSelected : state})
+    }
+
 }

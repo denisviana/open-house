@@ -8,7 +8,7 @@ const styles = theme => ({
     "&:hover" : {
       background: "none"
     },
-    borderRadius: 10,
+    borderRadius: 0,
     borderColor: "#ffb300",
     color: '#ffb300',
     height: 35,

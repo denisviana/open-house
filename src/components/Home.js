@@ -90,67 +90,69 @@ class Home extends Component {
         console.log(width);
 
         this.state.items.map((item, index) => {
-            if (width == 'xs') {
-                itemChilds.push(
-                    <Grid item xs='12' sm='5' lg='3' md='4' key={item.key}>
-                        <Card style={{
-                            borderRadius: 5, display: 'flex', direction: "row",
-                            alignItems: "center",
-                            justify: "center"
-                        }}>
-                            <CardMedia style={{ width: '100%', padding: 5 }}>
-                                <Image src={item.imageUrl} />
-                            </CardMedia>
-                            <div style={{ displa: 'flex', flexDirection: 'column' }}>
-                                <CardActionArea style={{ flex: '1 0 auto' }}
+            if(!item.isSelected){
+                if (width == 'xs') {
+                    itemChilds.push(
+                        <Grid item xs='12' sm='5' lg='3' md='4' key={item.key}>
+                            <Card style={{
+                                borderRadius: 5, display: 'flex', direction: "row",
+                                alignItems: "center",
+                                justify: "center"
+                            }}>
+                                <CardMedia style={{ width: '100%', padding: 5 }}>
+                                    <Image src={item.imageUrl} />
+                                </CardMedia>
+                                <div style={{ display: 'flex', flexDirection: 'column' }}>
+                                    <CardActionArea style={{ flex: '1 0 auto' }}
+                                        disableRipple='true'
+                                        disableTouchRipple='true'
+                                        disabled='true'>
+                                        <CardContent>
+                                            <Typography component="h3" variant="h7" align='left'>{item.title}</Typography>
+                                            <Typography component="p" align='left' style={{ color: '#5d5d5d' }}>
+                                                Preço médio: <span style={{ fontWeight: 600, color: '#ffb300' }}>{item.price}</span>
+                                            </Typography>
+                                        </CardContent>
+                                    </CardActionArea>
+                                    <CardActions style={{ justifyContent: 'left' }}>
+                                        <PrimaryButton variant="contained" onClick={() => this.addProductToCart(item)} label="Selecionar" />
+                                        <SecondaryButton label="Loja" style={{marginRight:10}} />
+                                    </CardActions>
+                                </div>
+                            </Card>
+                        </Grid>
+                    )
+                } else {
+                    itemChilds.push(
+                        <Grid item xs='10' sm='5' lg='3' md='4' key={item.key}>
+                            <Card style={{ borderRadius: 5 }}>
+    
+                                <CardActionArea
                                     disableRipple='true'
                                     disableTouchRipple='true'
                                     disabled='true'>
+    
+                                    <CardMedia style={{ padding: 16 }}>
+                                        <Image src={item.imageUrl} />
+                                    </CardMedia>
+    
                                     <CardContent>
-                                        <Typography component="h3" variant="h7" align='left'>{item.title}</Typography>
-                                        <Typography component="p" align='left' style={{ color: '#5d5d5d' }}>
+                                        <Typography component="h2" variant="h6">{item.title}</Typography>
+                                        <Typography component="p" style={{ color: '#5d5d5d' }}>
                                             Preço médio: <span style={{ fontWeight: 600, color: '#ffb300' }}>{item.price}</span>
                                         </Typography>
                                     </CardContent>
+    
                                 </CardActionArea>
-                                <CardActions style={{ justifyContent: 'left' }}>
+    
+                                <CardActions style={{ justifyContent: 'center', marginBottom: '10px' }}>
                                     <PrimaryButton variant="contained" onClick={() => this.addProductToCart(item)} label="Selecionar" />
-                                    <SecondaryButton label="Loja" style={{marginRight:10}} />
+                                    <SecondaryButton label="Ver loja" />
                                 </CardActions>
-                            </div>
-                        </Card>
-                    </Grid>
-                )
-            } else {
-                itemChilds.push(
-                    <Grid item xs='10' sm='5' lg='3' md='4' key={item.key}>
-                        <Card style={{ borderRadius: 5 }}>
-
-                            <CardActionArea
-                                disableRipple='true'
-                                disableTouchRipple='true'
-                                disabled='true'>
-
-                                <CardMedia style={{ padding: 16 }}>
-                                    <Image src={item.imageUrl} />
-                                </CardMedia>
-
-                                <CardContent>
-                                    <Typography component="h2" variant="h6">{item.title}</Typography>
-                                    <Typography component="p" style={{ color: '#5d5d5d' }}>
-                                        Preço médio: <span style={{ fontWeight: 600, color: '#ffb300' }}>{item.price}</span>
-                                    </Typography>
-                                </CardContent>
-
-                            </CardActionArea>
-
-                            <CardActions style={{ justifyContent: 'center', marginBottom: '10px' }}>
-                                <PrimaryButton variant="contained" onClick={() => this.addProductToCart(item)} label="Selecionar" />
-                                <SecondaryButton label="Ver loja" />
-                            </CardActions>
-                        </Card>
-                    </Grid>
-                )
+                            </Card>
+                        </Grid>
+                    )
+                }
             }
         }
         );
@@ -205,7 +207,7 @@ class Home extends Component {
                     justify="center"
                     style={{ paddingTop: 15}}>
 
-                    <Grid item xs='12' lg='8'>
+                    <Grid item xs='12' lg='10'>
                         <Grid container
                         spacing={16}
                         direction="row" 
