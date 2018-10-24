@@ -114,7 +114,9 @@ class Add extends Component{
                                             margin="normal"
                                             variant="outlined"
                                             className='input-field' 
-                                            type='number' 
+                                            type='number'
+                                            step="0.01"
+                                            min="0"
                                             label='Valor médio'
                                             required
                                             ></TextField>
