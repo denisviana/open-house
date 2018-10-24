@@ -19,15 +19,10 @@ import withWidth from '@material-ui/core/withWidth';
 import Dialog from '@material-ui/core/Dialog';
 import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
-import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogTitle from '@material-ui/core/DialogTitle';
-import Slide from '@material-ui/core/Slide';
 import CartActions from '../actions/CartActions';
-
-
-function Transition(props) {
-    return <Slide direction="up" {...props} />;
-}
+import CartStore from '../stores/cart/CartStore';
+import Snackbar from '@material-ui/core/Snackbar';
 
 class Home extends Component {
 
@@ -38,6 +33,9 @@ class Home extends Component {
             items: [],
             openDialog: false,
             itemSelected: '',
+            orderBy : 'title',
+            itemsCart : [],
+            openSnack: false
         };
     }
     
@@ -48,10 +46,24 @@ class Home extends Component {
         });
     };
 
+    sortItemsBy = (orderBy, direction) => {
+        let order = {
+            by : orderBy,
+            direction : direction
+        }
+        FirebaseService.getDataList('products', order, (dataReceived) =>
+        this.setState({ items: dataReceived }))
+        this.handleClose();
+    };
+
     handleClose = () => {
         this.setState({
             anchorEl: null,
         });
+    };
+
+    handleSnackbarClose = () => {
+        this.setState({ openSnack: false });
     };
 
     handleClickOpenDialog = (title) => {
@@ -68,11 +80,33 @@ class Home extends Component {
     }
 
     componentDidMount() {
-        FirebaseService.getDataList('products', (dataReceived) =>
+        let order = {
+            by : 'title',
+            direction : 'asc'
+        }
+        FirebaseService.getDataList('products', order, (dataReceived) =>
             this.setState({ items: dataReceived }))
+               
+     CartStore.addChangeListener(this._onChange);
+        
+    }
+
+    _onChange = () => {
+        let items = [];
+        items = CartStore.getCartItems();
+        this.setState({itemsCart : items})
+    }
+
+    componentWillUnmount(){
+        CartStore.removeChangeListener(this._onChange);
     }
 
     addProductToCart(item){
+
+        if(this.state.itemsCart.includes(item)){
+            this.setState({snackMsg : "Ops, já existe um item igual adicionado no carrinho.",  openSnack : true});
+            return;
+        }
 
         var update = {
             name : 'name'
@@ -80,21 +114,30 @@ class Home extends Component {
 
         CartActions.addToCart(item,update);
         CartActions.updateCartVisible(true);
-    }
+        this.setState({snackMsg : item.title+" adicionado no carrinho.",  openSnack : true});    }
 
     updateUi = () => {
 
         let itemChilds = [];
         const { width } = this.props;
 
-        console.log(width);
-
-        this.state.items.map((item, index) => {
-            if(!item.isSelected){
+        this.state.items.map((item) => {
                 if (width == 'xs') {
                     itemChilds.push(
-                        <Grid item xs='12' sm='5' lg='3' md='4' key={item.key}>
-                            <Card style={{
+                        <Grid item xs='12' sm='5' lg='3' md='4' key={item.key} style={{position:'relative'}}>
+
+                            <Typography component="h6" variant="h5" color="secondary" style={
+                                item.available ? {top:'50%', position: 'absolute', zIndex: 100, left: '30%', opacity: '0'} : {top:'40%', position: 'absolute', zIndex: 100, left: '30%', opacity: '1'}
+                            }><b>INDISPONÍVEL</b></Typography>
+
+                            <Card style={item.available ?{
+                                opacity:"1",
+                                borderRadius: 5, display: 'flex', direction: "row",
+                                alignItems: "center",
+                                justify: "center"
+                            } : 
+                            {
+                                opacity:"0.2",
                                 borderRadius: 5, display: 'flex', direction: "row",
                                 alignItems: "center",
                                 justify: "center"
@@ -108,15 +151,15 @@ class Home extends Component {
                                         disableTouchRipple='true'
                                         disabled='true'>
                                         <CardContent>
-                                            <Typography component="h3" variant="h7" align='left'>{item.title}</Typography>
+                                            <Typography component="h6" align='left'><b>{item.title}</b></Typography>
                                             <Typography component="p" align='left' style={{ color: '#5d5d5d' }}>
-                                                Preço médio: <span style={{ fontWeight: 600, color: '#ffb300' }}>{item.price}</span>
+                                                Preço médio: <span style={{ fontWeight: 600, color: '#ffb300' }}>R$ {item.price}</span>
                                             </Typography>
                                         </CardContent>
                                     </CardActionArea>
                                     <CardActions style={{ justifyContent: 'left' }}>
-                                        <PrimaryButton variant="contained" onClick={() => this.addProductToCart(item)} label="Selecionar" />
-                                        <SecondaryButton label="Loja" style={{marginRight:10}} />
+                                        <PrimaryButton variant="contained" disabled={!item.available} onClick={() => this.addProductToCart(item)} label="Selecionar" />
+                                        <SecondaryButton label="Loja" disabled={!item.available} style={{marginRight:10}} />
                                     </CardActions>
                                 </div>
                             </Card>
@@ -124,37 +167,39 @@ class Home extends Component {
                     )
                 } else {
                     itemChilds.push(
-                        <Grid item xs='10' sm='5' lg='3' md='4' key={item.key}>
-                            <Card style={{ borderRadius: 5 }}>
-    
+                        <Grid item xs='10' sm='5' lg='3' md='4' key={item.key} style={{position:'relative'}}>
+
+                            <Typography component="h6" variant="h5" color="secondary" style={
+                                item.available ? {top:'50%', position: 'absolute', zIndex: 100, left: '30%', opacity: '0'} : {top:'50%', position: 'absolute', zIndex: 100, left: '30%', opacity: '1'}
+                            }><b>INDISPONÍVEL</b></Typography>
+
+                            <Card style={ item.available ? { borderRadius: 5, opacity:"1"} : { borderRadius: 5, opacity:"0.2"}}>
                                 <CardActionArea
                                     disableRipple='true'
                                     disableTouchRipple='true'
                                     disabled='true'>
-    
                                     <CardMedia style={{ padding: 16 }}>
                                         <Image src={item.imageUrl} />
                                     </CardMedia>
-    
+
                                     <CardContent>
-                                        <Typography component="h2" variant="h6">{item.title}</Typography>
+                                        <Typography component="h6"><b>{item.title}</b></Typography>
                                         <Typography component="p" style={{ color: '#5d5d5d' }}>
-                                            Preço médio: <span style={{ fontWeight: 600, color: '#ffb300' }}>{item.price}</span>
+                                            Preço médio: <span style={{ fontWeight: 600, color: '#ffb300' }}>R$ {item.price}</span>
                                         </Typography>
                                     </CardContent>
     
                                 </CardActionArea>
     
                                 <CardActions style={{ justifyContent: 'center', marginBottom: '10px' }}>
-                                    <PrimaryButton variant="contained" onClick={() => this.addProductToCart(item)} label="Selecionar" />
-                                    <SecondaryButton label="Ver loja" />
+                                    <PrimaryButton variant="contained" disabled={!item.available} onClick={() => this.addProductToCart(item)} label="Selecionar" />
+                                    <SecondaryButton label="Ver loja" disabled={!item.available} href={item.storeUrl}/>
                                 </CardActions>
                             </Card>
                         </Grid>
                     )
                 }
             }
-        }
         );
         return itemChilds;
     }
@@ -186,20 +231,32 @@ class Home extends Component {
                     transformOrigin={{
                         vertical: 'top',
                         horizontal: 'center',
-                    }}
-                >
+                    }}>
+
                     <List component="nav">
                         <ListItem button>
-                            <ListItemText primary="Ordem Alfabética" />
+                            <ListItemText primary="Ordem Alfabética" onClick={() => this.sortItemsBy('title')}/>
                         </ListItem>
                         <ListItem button>
-                            <ListItemText primary="Menor Preço" />
+                            <ListItemText primary="Menor Preço" onClick={() => this.sortItemsBy('price', 'asc')}/>
                         </ListItem>
                         <ListItem button>
-                            <ListItemText primary="Maior Preço" />
+                            <ListItemText primary="Maior Preço" onClick={() => this.sortItemsBy('price', 'desc')}/>
                         </ListItem>
                     </List>
                 </Popover>
+
+                <Snackbar
+                    anchorOrigin={{ 
+                        vertical : 'top', 
+                        horizontal: 'left' }}
+                    open={this.state.openSnack}
+                    onClose={this.handleSnackbarClose}
+                    ContentProps={{
+                        'aria-describedby': 'message-id',
+                    }}
+                    message={<span id="message-id">{this.state.snackMsg}</span>}
+                />
 
                 <Grid container
                     direction="row" 
@@ -218,27 +275,6 @@ class Home extends Component {
                     </Grid>
 
                 </Grid>
-
-
-                <Dialog
-                    TransitionComponent={Transition}
-                    keepMounted
-                    open={this.state.openDialog}
-                    onClose={this.handleCloseDialog}
-                    aria-labelledby="alert-dialog-title"
-                    aria-describedby="alert-dialog-description"
-                    >
-                        <DialogTitle id="alert-dialog-title">{"Selecionar item"}</DialogTitle>
-                        <DialogContent>
-                        <DialogContentText id="alert-dialog-description">
-                            Tem certeza que deseja selecionar o item <b>{this.state.itemSelected}</b>? Uma vez selecionado, o item será removido da lista.
-                        </DialogContentText>
-                        </DialogContent>
-                        <DialogActions>
-                            <PrimaryButton label="Sim, tenho certeza." />
-                            <SecondaryButton label="Escolher outro." onClick={() => this.handleCloseDialog()}/>
-                    </DialogActions>
-                </Dialog>
 
             </div>
         )

@@ -30,6 +30,13 @@ var CartActions = {
             actionType : CartConstants.CART_VISIBLE,
             cartVisible : cartVisible
         });
+    },
+
+    removeItemFromCart : function(item){
+        AppDispatcher.handleAction({
+            actionType : CartConstants.CART_REMOVE,
+            item : item
+        });
     }
 
 };

@@ -28,7 +28,8 @@ class Add extends Component{
             storeUrl: this.state.storeUrl,
             price: this.state.price,
             environment: this.state.environment,
-            isSelected: false
+            isSelected: false,
+            available: true
         }
 
         FirebaseService.saveData('products',newItem);

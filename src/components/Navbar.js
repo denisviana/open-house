@@ -17,6 +17,8 @@ import DialogTitle from '@material-ui/core/DialogTitle';
 import DeleteIcon from '@material-ui/icons/Delete';
 import Divider from '@material-ui/core/Divider';
 import FirebaseService from '../services/FirebaseServices';
+import Slide from '@material-ui/core/Slide';
+import DialogContentText from '@material-ui/core/DialogContentText';
 
 
 const styles = theme => ({
@@ -29,6 +31,10 @@ const styles = theme => ({
     },
 });
 
+function Transition(props) {
+    return <Slide direction="left" {...props} />;
+}
+
 
 class Navbar extends Component{
 
@@ -38,7 +44,8 @@ class Navbar extends Component{
             openDialog: false,
             anchorEl: null,
             counter : 0,
-            itemsCart : []
+            itemsCart : [],
+            openConfirmCartDialog: false
         }
     }
 
@@ -47,11 +54,12 @@ class Navbar extends Component{
         let items = this.state.itemsCart;
 
         items.map((value,index) =>
-            FirebaseService.updateStateItem('products',value.key,true)
+            FirebaseService.updateStateItem('products',value.key,false)
         )
 
-        this.setState({itemsCart : [], counter : 0, openDialog : false})
-
+        this.setState({itemsCart : [], counter : 0})
+        this.setState({ openConfirmCartDialog: false });
+        this.setState({ openDialog: false });
     }
 
     openPopup = event => {
@@ -67,6 +75,14 @@ class Navbar extends Component{
     
     handleCloseDialog = () => {
         this.setState({ openDialog: false });
+    };
+
+    handleClickOpenConfirmCartDialog = () => {
+        this.setState({ openConfirmCartDialog: true});
+      };
+
+    handleCloseConfirmCartDialog = () => {
+        this.setState({ openConfirmCartDialog: false });
     };
 
     closePopup = () => {
@@ -119,7 +135,7 @@ class Navbar extends Component{
                     classes={{ badge: styles.badge}}
                     aria-haspopup="true"
                     aria-owns={open ? 'cart-popup' : null}>
-                        <Badge badgeContent={this.state.counter} color="secondary"> 
+                        <Badge badgeContent={this.state.counter > 0 ? this.state.counter : ""} color={this.state.counter > 0 ? "secondary" : "transparent"}> 
                             <img src={cart} style={{height: 34}}/>
                         </Badge>
                     </IconButton>
@@ -142,6 +158,7 @@ class Navbar extends Component{
                 </Popover>
 
                 <Dialog
+                     TransitionComponent={Transition}
                     keepMounted
                     maxWidth="sm"
                     open={this.state.openDialog}
@@ -176,8 +193,26 @@ class Navbar extends Component{
                             </div>
                         </DialogContent>
                         <DialogActions>
-                            <PrimaryButton label="Finalizar" onClick={() => this.finalizeCart()}/>
+                            <PrimaryButton label="Finalizar" onClick={() => this.handleClickOpenConfirmCartDialog()}/>
                             <SecondaryButton label="Adicionar mais" onClick={() => this.handleCloseDialog()}/>
+                    </DialogActions>
+                </Dialog>
+
+                <Dialog
+                    keepMounted
+                    open={this.state.openConfirmCartDialog}
+                    onClose={this.handleCloseConfirmCartDialog}
+                    aria-labelledby="alert-dialog-title"
+                    aria-describedby="alert-dialog-description">
+                        <DialogTitle id="alert-dialog-title">{"Atenção"}</DialogTitle>
+                        <DialogContent>
+                        <DialogContentText id="alert-dialog-description">
+                            Tem certeza que deseja confirmar os itens selecionados? Uma vez confirmado, os mesmos serão removidos da lista.
+                        </DialogContentText>
+                        </DialogContent>
+                        <DialogActions>
+                            <PrimaryButton label="Sim, tenho certeza" onClick={() => this.finalizeCart()}/>
+                            <SecondaryButton label="Voltar" onClick={() => this.handleCloseConfirmCartDialog()}/>
                     </DialogActions>
                 </Dialog>
 

@@ -24,7 +24,7 @@ class SecondaryButton extends Component{
 
   render(){
     const { classes } = this.props;
-    return <Button classes={{ root: classes.root, label: classes.label }} onClick={this.props.onClick} style={this.props.style}  variant="outlined">{this.props.label}</Button>;
+    return <Button disabled={this.props.disabled} classes={{ root: classes.root, label: classes.label }} onClick={this.props.onClick} href={this.props.href} style={this.props.style} target="_blank" variant="outlined">{this.props.label}</Button>;
   }
 }
 

@@ -27,6 +27,7 @@ class PrimaryButton extends Component {
   render(){
     const { classes } = this.props;
     return <Button 
+      disabled={this.props.disabled}
       type={this.props.type} 
       raised={true} 
       style={this.props.style} 
