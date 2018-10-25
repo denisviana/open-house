@@ -120,11 +120,14 @@ class Navbar extends Component{
     }
 
     _onChange = () => {
+        
         let items = [];
-        items = CartStore.getCartItems();
+        let cart = CartStore.getCartItems();
+        items = cart.products;
         this.setState({itemsCart : items})
         console.log(items.length)
         this.setState({counter : items.length});
+        console.log(cart.email);
     }
 
     render(){

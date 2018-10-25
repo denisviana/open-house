@@ -17,11 +17,12 @@ var CartActions = {
         });
     },
 
-    addToCart : function(item, update){
+    addToCart : function(item, update, userEmail){
        AppDispatcher.handleAction({
             actionType : CartConstants.CART_ADD,
             item : item,
-            update : update
+            update : update,
+            userEmail : userEmail
        }) ;
     },
 

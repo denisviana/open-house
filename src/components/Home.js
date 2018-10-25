@@ -35,8 +35,10 @@ class Home extends Component {
             itemSelected: '',
             orderBy : 'title',
             itemsCart : [],
-            openSnack: false
+            openSnack: false,
+            userEmail : this.props.location.param1
         };
+        
     }
     
 
@@ -112,7 +114,7 @@ class Home extends Component {
             name : 'name'
         }
 
-        CartActions.addToCart(item,update);
+        CartActions.addToCart(item,update,this.state.userEmail);
         CartActions.updateCartVisible(true);
         this.setState({snackMsg : item.title+" adicionado no carrinho.",  openSnack : true});    }
 

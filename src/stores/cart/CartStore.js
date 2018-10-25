@@ -5,9 +5,11 @@ var EventEmmiter = require('events').EventEmitter;
 var _ = require('underscore');
 
 var _products = [], _cartVisibile = false;
+var _userEmail = ""
 
-function add(item, update){
+function add(item, update, userEmail){
     _products.push(item);
+    _userEmail = userEmail;
 }
 
 function setCartVisible(cartVisibile){
@@ -21,7 +23,8 @@ function removeItem(item){
 var CartStore = _.extend({}, EventEmmiter.prototype,{
 
     getCartItems : function() {
-        return _products;
+        let cart = {products : _products, email : _userEmail}
+        return cart;
     },
 
     getCartCount : function(){

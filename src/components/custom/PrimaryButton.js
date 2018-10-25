@@ -27,6 +27,8 @@ class PrimaryButton extends Component {
   render(){
     const { classes } = this.props;
     return <Button 
+      to={this.props.to}
+      component={this.props.component}
       disabled={this.props.disabled}
       type={this.props.type} 
       raised={true} 
