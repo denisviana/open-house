@@ -1,6 +1,6 @@
 export default class HtmlUitl{
 
-    static makeHtmlTemplate = (items) => {
+    static makeHtmlTemplate = (items,username) => {
 
         console.log(items);
 
@@ -22,12 +22,17 @@ export default class HtmlUitl{
         <img src='https://firebasestorage.googleapis.com/v0/b/open-house-9cd52.appspot.com/o/malu1.jpg?alt=media&token=9109dbd9-cd23-4011-8dbf-de0e48b853f0' alt='Avatar' style='width:150px'>
         <img src='https://firebasestorage.googleapis.com/v0/b/open-house-9cd52.appspot.com/o/denis1.png?alt=media&token=8bc6b2d8-0e99-4b7d-a4b1-e343b2b6f276' alt='Avatar' style='width:150px'>
         
-        <h3>Olá!! Estamos muito felizes por poder contar com você nessa nova fase.</h3>
-        <p>Te esperamos agora na nossa festa :)</p>
-        <p>Pra você ficar por dentro, seguem abaixo todos os dados importantes, inclusive os itens que você escolheu.</p>
+        <h3>Olá `+username+`!! Estamos muito felizes por poder contar com você nessa nova fase.</h3>
+        <p>Te esperamos agora em nossa festa :)</p>
+        <p>Pra você ficar por dentro: Seguem abaixo todos os dados importantes, inclusive os itens que você escolheu.</p>
         
         <div style='text-align: left'>
         <br/>
+
+        <br/>
+        <span>Confirme sua presença no evento do Facebook: <a href="https://www.facebook.com/events/285907765241994/?ti=cl">Evento</a></span>
+        <br/><br/>
+
         <span><b>Data: </b>17/11/2018</span><br/>
         <span><b>Hora: </b>14:00</span><br/>
         <span><b>Local: </b>Rua Augusto de Mari, 3994 - Guaira (Salão de Festas)</span><br/>
@@ -64,8 +69,13 @@ export default class HtmlUitl{
         let bottom = `</ul>
         
         <hr style='margin-top: 30px'/>
+
+        <p>
+            Se tiver dúvidas ou precisar alterar seus itens, fale com a gente ou responda esse email!
+        </p>
+
         <p style='margin-top: 30px'>
-            Com carinho,<br/><br/>
+            Partiu festa!!<br/><br/>
             Denis e Malu
         </p>
         

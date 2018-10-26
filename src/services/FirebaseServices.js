@@ -1,4 +1,5 @@
-import {firebaseDatabase} from '../utils/FirebaseUtils'
+import {firebaseDatabase} from '../utils/FirebaseUtils';
+import {firebaseAuth} from '../utils/FirebaseUtils';
 
 export default class FirebaseService {
     static getDataList = (nodePath, order, callback) => {
@@ -77,6 +78,7 @@ export default class FirebaseService {
     };
 
     static confirmItemsSelecteds = (nodePath,confirmCart) => {
+        console.log("Firebase: ",confirmCart);
         const ref = firebaseDatabase.ref(nodePath).push();
         const id = firebaseDatabase.ref(nodePath).push().key;
         ref.set(confirmCart);
@@ -86,6 +88,10 @@ export default class FirebaseService {
     static updateStateItem = (node, id, state) => {
         const ref = firebaseDatabase.ref(node + '/' + id);
         ref.update({available : state})
+    };
+
+    static auth = () =>{
+        return firebaseAuth;
     };
 
 }

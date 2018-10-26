@@ -13,7 +13,8 @@ import MainLayout from './components/MainLayout';
 import Home from './components/Home';
 import Add from './components/Add';
 import Welcome from './components/Welcome';
-import EmptyLayout from './components/EmptyLayout';
+import Thanks from './components/Thanks';
+import NotFound from './components/NotFound';
 
 const theme = createMuiTheme({
   palette: {
@@ -46,10 +47,12 @@ class App extends Component {
               <div>
                <Switch>
                   <Route path={urls.welcome.path} exact component={Welcome} />
+                  <Route path={urls.thanks.path} exact component={Thanks}/>
                   <MainLayout>
                     <Switch>
                       <Route path={urls.home.path} exact component={Home} />
                       <Route path={urls.add.path} exact component={Add}/>
+                      <Route path="*" component={NotFound}/>
                     </Switch>              
                   </MainLayout>
                </Switch>

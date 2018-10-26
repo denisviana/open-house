@@ -16,13 +16,10 @@ import ListItemText from '@material-ui/core/ListItemText';
 import FirebaseService from '../services/FirebaseServices';
 import Image from 'material-ui-image';
 import withWidth from '@material-ui/core/withWidth';
-import Dialog from '@material-ui/core/Dialog';
-import DialogActions from '@material-ui/core/DialogActions';
-import DialogContent from '@material-ui/core/DialogContent';
-import DialogTitle from '@material-ui/core/DialogTitle';
 import CartActions from '../actions/CartActions';
 import CartStore from '../stores/cart/CartStore';
 import Snackbar from '@material-ui/core/Snackbar';
+import Navbar from '../components/Navbar';
 
 const itemsInCart = [];
 
@@ -116,8 +113,9 @@ class Home extends Component {
         }
         
         let email = this.props.location.param1;
+        let name = this.props.location.param2
         itemsInCart.push(item);
-        CartActions.addToCart(item,update,email);
+        CartActions.addToCart(item,update,email,name);
         CartActions.updateCartVisible(true);
         this.setState({snackMsg : item.title+" adicionado no carrinho.",  openSnack : true, itemsCart : itemsInCart});    }
 
@@ -217,70 +215,73 @@ class Home extends Component {
         const open = Boolean(anchorEl);
 
         return (
-            <div className="content">
+            <div>
+              <Navbar/>
+              <div className="content">
 
-                <SortButton float="right" label='Ordenar' icon='fas fa-sort-amount-up'
-                    aria-haspopup="true"
-                    aria-owns={open ? 'simple-popper' : null}
-                    onClick={this.handleClick} />
+<SortButton float="right" label='Ordenar' icon='fas fa-sort-amount-up'
+    aria-haspopup="true"
+    aria-owns={open ? 'simple-popper' : null}
+    onClick={this.handleClick} />
 
-                <Popover
-                    id="simple-popper"
-                    open={open}
-                    anchorEl={anchorEl}
-                    onClose={this.handleClose}
-                    anchorOrigin={{
-                        vertical: 'bottom',
-                        horizontal: 'left',
-                    }}
-                    transformOrigin={{
-                        vertical: 'top',
-                        horizontal: 'center',
-                    }}>
+<Popover
+    id="simple-popper"
+    open={open}
+    anchorEl={anchorEl}
+    onClose={this.handleClose}
+    anchorOrigin={{
+        vertical: 'bottom',
+        horizontal: 'left',
+    }}
+    transformOrigin={{
+        vertical: 'top',
+        horizontal: 'center',
+    }}>
 
-                    <List component="nav">
-                        <ListItem button>
-                            <ListItemText primary="Ordem Alfabética" onClick={() => this.sortItemsBy('title')}/>
-                        </ListItem>
-                        <ListItem button>
-                            <ListItemText primary="Menor Preço" onClick={() => this.sortItemsBy('price', 'asc')}/>
-                        </ListItem>
-                        <ListItem button>
-                            <ListItemText primary="Maior Preço" onClick={() => this.sortItemsBy('price', 'desc')}/>
-                        </ListItem>
-                    </List>
-                </Popover>
+    <List component="nav">
+        <ListItem button>
+            <ListItemText primary="Ordem Alfabética" onClick={() => this.sortItemsBy('title')}/>
+        </ListItem>
+        <ListItem button>
+            <ListItemText primary="Menor Preço" onClick={() => this.sortItemsBy('price', 'asc')}/>
+        </ListItem>
+        <ListItem button>
+            <ListItemText primary="Maior Preço" onClick={() => this.sortItemsBy('price', 'desc')}/>
+        </ListItem>
+    </List>
+</Popover>
 
-                <Snackbar
-                    anchorOrigin={{ 
-                        vertical : 'top', 
-                        horizontal: 'left' }}
-                    open={this.state.openSnack}
-                    onClose={this.handleSnackbarClose}
-                    ContentProps={{
-                        'aria-describedby': 'message-id',
-                    }}
-                    message={<span id="message-id">{this.state.snackMsg}</span>}
-                />
+<Snackbar
+    anchorOrigin={{ 
+        vertical : 'top', 
+        horizontal: 'left' }}
+    open={this.state.openSnack}
+    onClose={this.handleSnackbarClose}
+    ContentProps={{
+        'aria-describedby': 'message-id',
+    }}
+    message={<span id="message-id">{this.state.snackMsg}</span>}
+/>
 
-                <Grid container
-                    direction="row" 
-                    alignItems="center"
-                    justify="center"
-                    style={{ paddingTop: 15}}>
+<Grid container
+    direction="row" 
+    alignItems="center"
+    justify="center"
+    style={{ paddingTop: 15}}>
 
-                    <Grid item xs='12' lg='10'>
-                        <Grid container
-                        spacing={16}
-                        direction="row" 
-                        alignItems="center"
-                        justify="center">
-                            {this.updateUi()}
-                        </Grid>
-                    </Grid>
+    <Grid item xs='12' lg='10'>
+        <Grid container
+        spacing={16}
+        direction="row" 
+        alignItems="center"
+        justify="center">
+            {this.updateUi()}
+        </Grid>
+    </Grid>
 
-                </Grid>
+</Grid>
 
+</div>
             </div>
         )
     }

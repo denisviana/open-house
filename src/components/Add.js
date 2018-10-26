@@ -14,6 +14,7 @@ import FirebaseService from '../services/FirebaseServices';
 import TextField from '@material-ui/core/TextField';
 import MenuItem from '@material-ui/core/MenuItem';
 import Snackbar from '@material-ui/core/Snackbar';
+import Navbar from '../components/Navbar';
 
 import '../css/add.css'
 
@@ -86,7 +87,8 @@ class Add extends Component{
 
         return(
             <div>
-                <form onSubmit={this.submit}>
+                <Navbar/>
+                <form onSubmit={this.submit} style={{marginTop: 90}}>
                     <Grid 
                     container 
                     direction="row"

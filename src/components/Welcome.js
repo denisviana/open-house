@@ -1,15 +1,12 @@
 import React, { Component } from 'react';
 import Grid from '@material-ui/core/Grid';
-import Image from 'material-ui-image';
 import DenisImg from '../img/denis-img-1.png';
 import MaluImg from '../img/malu-img-1.png';
 import withWidth from '@material-ui/core/withWidth';
 import Typography from '@material-ui/core/Typography';
-import Button from '@material-ui/core/Button';
 import Dialog from '@material-ui/core/Dialog';
 import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
-import DialogTitle from '@material-ui/core/DialogTitle';
 import DialogContentText from '@material-ui/core/DialogContentText';
 import SecondaryButton from "./custom/SecondaryButton";
 import PrimaryButton from "./custom/PrimaryButton";
@@ -29,13 +26,31 @@ class Welcome extends Component{
         super(props);
         this.state = {
             openDialog : false,
-            email : ""
+            email : "",
+            name : "",
+            uid : ""
         }
+    }
+
+    componentWillMount(){
+
+        FirebaseService.auth().onAuthStateChanged((user) => {
+            if(user){
+                this.setState({uid : user.uid});
+            }else{
+                this.setState({uid : ""});
+            }
+        });
+
+        FirebaseService.auth().signInAnonymously().catch(function(error){
+            console.log(error.message);
+        });
     }
 
     navigateToHome = () => {
         
         const email = this.state.email;
+        const name = this.state.name;
 
         const newTo = { 
             pathname: "/email/"+email 
@@ -49,7 +64,7 @@ class Welcome extends Component{
 
     handleChange = name => event => {
         this.setState({
-          email: event.target.value,
+          [name]: event.target.value,
         });
     };
 
@@ -64,16 +79,24 @@ class Welcome extends Component{
 
         return(
            <div>
-                <div style={{position:'absolute', top:'0', left:'left', height:'100%', width:'100%', background:'#fbc531'}}>
+                <div style={{position:'absolute', top:'0', left:'left', height:'100vh', width:'100%', background:'#fbc531'}}>
                     <Grid container
                     direction="row"
                     justify="center"
                     alignItems="center"
                     style={{height:"100%"}}>
-                        <Grid item xs="12" style={{paddingTop:20,paddingBottom:20}}>
-                            <Typography component="h2" variant='display3' style={{color: "#fff"}}>
-                                Open House
-                            </Typography>
+                        <Grid item xs="12" container
+                    direction="row"
+                    justify="center"
+                    alignItems="center">
+                            <Grid item xs="10" sm="7" md="4" lg="4" style={{paddingTop:20,paddingBottom:20}}>
+                                <Typography variant='h2' style={{color: "#fff", fontFamily:'QuickSand'}}>
+                                    Open House
+                                </Typography>
+                                <Typography variant="h6" style={{color: "#fff", fontFamily:'Kaushan Script', textAlign : 'right'}}>
+                                    By Denis e Malu
+                                </Typography>
+                            </Grid>
                         </Grid>
                         <Grid item xs="6">
                             <img src={DenisImg} style={
@@ -96,6 +119,7 @@ class Welcome extends Component{
                     </Grid>
             </div>
             <Dialog
+            TransitionComponent={Transition}
             keepMounted
             minWidth="md"
             open={this.state.openDialog}
@@ -104,11 +128,19 @@ class Welcome extends Component{
             aria-describedby="alert-dialog-description">
                 <DialogContent>
                     <DialogContentText id="alert-dialog-description">
-                        Para visualizar os produtos, por favor informe seu e-mail.
+                        Para visualizar os produtos, por favor informe seu nome e e-mail.
                     </DialogContentText>
                 <div>
                         <TextField
                             onChange={this.handleChange('name')}
+                            margin="normal"
+                            variant="outlined"
+                            className='input-field' 
+                            type='email' 
+                            label='Nome'
+                        ></TextField>
+                        <TextField
+                            onChange={this.handleChange('email')}
                             margin="normal"
                             variant="outlined"
                             className='input-field' 
@@ -120,8 +152,9 @@ class Welcome extends Component{
                 </DialogContent>
                 <DialogActions>
                     <SecondaryButton label="Voltar" onClick={() => this.handleCloseDialog()}/>
-                    <PrimaryButton label="Pronto"  component={Link} to={{pathname : "/home", 
-                    param1 : this.state.email}}/>
+                    <PrimaryButton label="Pronto"  component={Link} to={{pathname : "/home/"+this.state.uid, 
+                    param1 : this.state.email,
+                    param2 : this.state.name}}/>
             </DialogActions>
             </Dialog>
            </div>

@@ -20,7 +20,10 @@ import FirebaseService from '../services/FirebaseServices';
 import Slide from '@material-ui/core/Slide';
 import DialogContentText from '@material-ui/core/DialogContentText';
 import HtmlUtil from '../utils/HtmlUtil';
-
+import { withRouter } from 'react-router-dom'
+import AppBar from '@material-ui/core/AppBar';
+import Toolbar from '@material-ui/core/Toolbar';
+import Typography from '@material-ui/core/Typography';
 
 const styles = theme => ({
     badge: {
@@ -47,7 +50,8 @@ class Navbar extends Component{
             counter : 0,
             itemsCart : [],
             openConfirmCartDialog: false,
-            userEmail : ""
+            userEmail : "",
+            userName : ""
         }
     }
 
@@ -63,15 +67,18 @@ class Navbar extends Component{
         this.setState({ openConfirmCartDialog: false });
         this.setState({ openDialog: false });
 
-        let html = HtmlUtil.makeHtmlTemplate(items)
+        let html = HtmlUtil.makeHtmlTemplate(items,this.state.userName);
 
         let confirmCart = {
             targetEmail : this.state.userEmail,
+            userName : this.state.userName,
             items : items,
             html : html
         }
 
         FirebaseService.confirmItemsSelecteds('productsByEmail',confirmCart);
+        this.setState({itemsCart : [], counter : 0});
+        this.props.history.push('/thanks')
 
     }
 
@@ -130,7 +137,7 @@ class Navbar extends Component{
         let items = [];
         let cart = CartStore.getCartItems();
         items = cart.products;
-        this.setState({itemsCart : items, counter : items.length, userEmail : cart.userEmail})
+        this.setState({itemsCart : items, counter : items.length, userEmail : cart.userEmail, userName : cart.userName})
     }
 
     render(){
@@ -140,19 +147,26 @@ class Navbar extends Component{
 
         return(
             <div>
-                <Grid container alignItems="center" className="navbar-main">
-                    <Grid item xs="12">
-                        <a className="navbar-title">Open House</a>                    
-                    </Grid>
-                    <IconButton  style={{position: 'absolute', right:20}} onClick={this.handleClickOpenDialog}
-                    classes={{ badge: styles.badge}}
-                    aria-haspopup="true"
-                    aria-owns={open ? 'cart-popup' : null}>
-                        <Badge badgeContent={this.state.counter > 0 ? this.state.counter : ""} color={this.state.counter > 0 ? "secondary" : "transparent"}> 
-                            <img src={cart} style={{height: 34}}/>
-                        </Badge>
-                    </IconButton>
-                </Grid>
+                <AppBar>
+                    <Toolbar className="navbar-main">
+                        <Grid container alignItems="center" className="navbar-main" style={{position: 'fixed'}}>
+                            <Grid item xs="12">
+                                <a className="navbar-title">Open House</a>
+                                <Typography style={{color: "#fff", fontFamily:'Kaushan Script', marginLeft: 80}}>
+                                    By Denis e Malu
+                                </Typography>                  
+                            </Grid>
+                            <IconButton  style={{position: 'absolute', right:25}} onClick={this.handleClickOpenDialog}
+                            classes={{ badge: styles.badge}}
+                            aria-haspopup="true"
+                            aria-owns={open ? 'cart-popup' : null}>
+                                <Badge badgeContent={this.state.counter > 0 ? this.state.counter : ""} color={this.state.counter > 0 ? "secondary" : "transparent"}> 
+                                    <img src={cart} style={{height: 34}}/>
+                                </Badge>
+                            </IconButton>
+                        </Grid>
+                    </Toolbar>
+                </AppBar>
 
                 <Popover
                     id="cart-popup"
@@ -171,9 +185,8 @@ class Navbar extends Component{
                 </Popover>
 
                 <Dialog
-                     TransitionComponent={Transition}
+                    TransitionComponent={Transition}
                     keepMounted
-                    maxWidth="sm"
                     open={this.state.openDialog}
                     onClose={this.handleCloseDialog}
                     aria-labelledby="alert-dialog-title"
@@ -181,18 +194,22 @@ class Navbar extends Component{
                         <DialogTitle id="alert-dialog-title">{"Carrinho"}</DialogTitle>
                         <DialogContent>
                         <Divider/>
-                            <div style={{width:"100%", maxWidth:400}}>
+                            <div style={{width:"100%"}}>
                                 <List>
                                     {
                                         this.state.itemsCart.map((value,index) => 
                                                 <div>
-                                                    <ListItem style={{paddingTop:5, paddingBottom:5, paddingLeft: 0, paddingRight: 0, minWidth:300, width:'100%'}}>
-                                                        <img style={{height: 50, width: 50, marginRight: 15}} src={value.imageUrl}/>
-                                                        <div style={{ display: 'flex', flexDirection: 'column' }}>
-                                                            <span style={{fontSize: 13, display: 'block'}}><b>{value.title}</b></span>
-                                                            <span style={{fontSize: 13}}>R$ 200,00</span>
+                                                    <ListItem 
+                                                    style={{paddingTop:5, paddingBottom:5, paddingLeft: 0, 
+                                                    paddingRight: 0, minWidth:300, width:'100%'}}>
+                                                        <img style={{height: 50, width: 50, marginRight: 15, display: 'inline-block'}} src={value.imageUrl}/>
+                                                        <div style={{display: 'inline-block'}}>
+                                                            <div style={{ display: 'flex', flexDirection: 'column', width: '80%'}}>
+                                                                <span style={{fontSize: 13}}><b>{value.title}</b></span>
+                                                                <span style={{fontSize: 13}}>R$ 200,00</span>
+                                                            </div>
                                                         </div>
-                                                        <ListItemSecondaryAction>
+                                                        <ListItemSecondaryAction style={{display: 'inline-block'}}>
                                                             <IconButton onClick={() => this.removeItemFromCart(value.key)}>
                                                                 <DeleteIcon color="#ccc"/>
                                                             </IconButton>
@@ -234,4 +251,4 @@ class Navbar extends Component{
     }
 }
 
-export default Navbar;
+export default withRouter(Navbar);

@@ -5,11 +5,13 @@ var EventEmmiter = require('events').EventEmitter;
 var _ = require('underscore');
 
 var _products = [], _cartVisibile = false;
-var _userEmail = ""
+var _userEmail = "";
+var _userName = "";
 
-function add(item, update, userEmail){
+function add(item, update, userEmail, userName){
     _products.push(item);
     _userEmail = userEmail;
+    _userName = userName;
     console.log(userEmail);
 }
 
@@ -24,7 +26,7 @@ function removeItem(item){
 var CartStore = _.extend({}, EventEmmiter.prototype,{
 
     getCartItems : function() {
-        let cart = { products : _products, userEmail : _userEmail}
+        let cart = { products : _products, userEmail : _userEmail, userName : _userName}
         return cart;
     },
 
@@ -57,7 +59,7 @@ AppDispatcher.register(function(payload) {
         switch(action.actionType) {
     
             case CartConstants.CART_ADD:
-                add(action.item, action.update, action.userEmail);
+                add(action.item, action.update, action.userEmail, action.userName);
                 break;
         
             case CartConstants.CART_VISIBLE:
