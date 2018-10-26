@@ -90,6 +90,12 @@ class Add extends Component{
             },
             {
                 label: 'Quarto',
+            },
+            {
+                label: 'Limpeza',
+            },
+            {
+                label: 'Utilidades',
             }
           ];
 
