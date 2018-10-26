@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import Grid from '@material-ui/core/Grid';
 import Image from 'material-ui-image';
 import DenisImg from '../img/denis-img-1.png';
-import MaluImg from '../img/malu-img-1.jpg';
+import MaluImg from '../img/malu-img-1.png';
 import withWidth from '@material-ui/core/withWidth';
 import Typography from '@material-ui/core/Typography';
 import Button from '@material-ui/core/Button';

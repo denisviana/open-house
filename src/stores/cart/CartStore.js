@@ -10,6 +10,7 @@ var _userEmail = ""
 function add(item, update, userEmail){
     _products.push(item);
     _userEmail = userEmail;
+    console.log(userEmail);
 }
 
 function setCartVisible(cartVisibile){
@@ -23,7 +24,7 @@ function removeItem(item){
 var CartStore = _.extend({}, EventEmmiter.prototype,{
 
     getCartItems : function() {
-        let cart = {products : _products, email : _userEmail}
+        let cart = { products : _products, userEmail : _userEmail}
         return cart;
     },
 
@@ -56,7 +57,7 @@ AppDispatcher.register(function(payload) {
         switch(action.actionType) {
     
             case CartConstants.CART_ADD:
-                add(action.item, action.update);
+                add(action.item, action.update, action.userEmail);
                 break;
         
             case CartConstants.CART_VISIBLE:

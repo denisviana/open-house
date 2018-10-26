@@ -24,6 +24,8 @@ import CartActions from '../actions/CartActions';
 import CartStore from '../stores/cart/CartStore';
 import Snackbar from '@material-ui/core/Snackbar';
 
+const itemsInCart = [];
+
 class Home extends Component {
 
     constructor(props) {
@@ -36,7 +38,6 @@ class Home extends Component {
             orderBy : 'title',
             itemsCart : [],
             openSnack: false,
-            userEmail : this.props.location.param1
         };
         
     }
@@ -113,10 +114,12 @@ class Home extends Component {
         var update = {
             name : 'name'
         }
-
-        CartActions.addToCart(item,update,this.state.userEmail);
+        
+        let email = this.props.location.param1;
+        itemsInCart.push(item);
+        CartActions.addToCart(item,update,email);
         CartActions.updateCartVisible(true);
-        this.setState({snackMsg : item.title+" adicionado no carrinho.",  openSnack : true});    }
+        this.setState({snackMsg : item.title+" adicionado no carrinho.",  openSnack : true, itemsCart : itemsInCart});    }
 
     updateUi = () => {
 

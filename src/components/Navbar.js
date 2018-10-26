@@ -19,6 +19,7 @@ import Divider from '@material-ui/core/Divider';
 import FirebaseService from '../services/FirebaseServices';
 import Slide from '@material-ui/core/Slide';
 import DialogContentText from '@material-ui/core/DialogContentText';
+import HtmlUtil from '../utils/HtmlUtil';
 
 
 const styles = theme => ({
@@ -45,7 +46,8 @@ class Navbar extends Component{
             anchorEl: null,
             counter : 0,
             itemsCart : [],
-            openConfirmCartDialog: false
+            openConfirmCartDialog: false,
+            userEmail : ""
         }
     }
 
@@ -61,8 +63,12 @@ class Navbar extends Component{
         this.setState({ openConfirmCartDialog: false });
         this.setState({ openDialog: false });
 
+        let html = HtmlUtil.makeHtmlTemplate(items)
+
         let confirmCart = {
-            targetEmail : "denis.costa@snowmanlabs.com"
+            targetEmail : this.state.userEmail,
+            items : items,
+            html : html
         }
 
         FirebaseService.confirmItemsSelecteds('productsByEmail',confirmCart);
@@ -124,10 +130,7 @@ class Navbar extends Component{
         let items = [];
         let cart = CartStore.getCartItems();
         items = cart.products;
-        this.setState({itemsCart : items})
-        console.log(items.length)
-        this.setState({counter : items.length});
-        console.log(cart.email);
+        this.setState({itemsCart : items, counter : items.length, userEmail : cart.userEmail})
     }
 
     render(){
