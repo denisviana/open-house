@@ -34,7 +34,15 @@ class Add extends Component{
         }
 
         FirebaseService.saveData('products',newItem);
-        this.setState({openSnack:true})
+        this.setState({
+            name: '',
+            imageUrl: '',
+            storeUrl: '',
+            price: '',
+            environment: '',
+            openSnack:true
+        })
+        
 
     }
 
