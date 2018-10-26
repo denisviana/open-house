@@ -28,8 +28,8 @@ class NotFound extends Component{
                     style={{height:"100%"}}>
                         <Grid item xs="12">
                             <img src={NotFoundImg} style={
-                                width == "xs" ? {maxHeight: 60} :
-                                width == "sm" ? {maxHeight: 100} :
+                                width == "xs" ? {maxHeight: 200} :
+                                width == "sm" ? {maxHeight: 200} :
                                 {maxHeight: 200} 
                             }/>
                         </Grid>

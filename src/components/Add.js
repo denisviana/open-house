@@ -112,6 +112,7 @@ class Add extends Component{
                                             <TextField
                                             onChange={this.handleChange('name')}
                                             margin="normal"
+                                            value={this.state.name}
                                             variant="outlined"
                                             className='input-field' 
                                             type='text' 
@@ -123,6 +124,7 @@ class Add extends Component{
                                             <TextField
                                             onChange={this.handleChange('price')}
                                             margin="normal"
+                                            value={this.state.price}
                                             variant="outlined"
                                             className='input-field' 
                                             type='text'                                        
@@ -133,6 +135,7 @@ class Add extends Component{
                                         <Grid item xs='12' lg='12'>
                                             <TextField 
                                             onChange={this.handleChange('imageUrl')}
+                                            value={this.state.imageUrl}
                                             margin="normal"
                                             variant="outlined"
                                             className='input-field' 
@@ -146,6 +149,7 @@ class Add extends Component{
                                             onChange={this.handleChange('storeUrl')}
                                             margin="normal"
                                             variant="outlined"
+                                            value={this.state.storeUrl}
                                             className='input-field' 
                                             type='text' 
                                             label='Link da loja'
@@ -157,6 +161,7 @@ class Add extends Component{
                                                 required
                                                 id="outlined-select-currency"
                                                 select
+                                                value={this.state.environment}
                                                 onChange={this.handleChange('environment')}
                                                 className='input-field'
                                                 label="Ambiente"
