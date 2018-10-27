@@ -60,6 +60,64 @@ export default class FirebaseService {
         return query;
     };
 
+    static getDataByCategory = (nodePath, order,category, callback) => {
+
+        let query = firebaseDatabase.ref(nodePath).orderByChild('environment').equalTo(category);
+        query.on('value', dataSnapshot => {
+            console.log(dataSnapshot.val());
+            let items = [];
+            let unavailables = [];
+            var sorted = [];
+            dataSnapshot.forEach(childSnapshot => {
+                let item = childSnapshot.val();
+
+                item['key'] = childSnapshot.key;
+                if(item.available)
+                    items.push(item);
+                else
+                    unavailables.push(item);
+
+                switch(order.by){
+                    case 'title':
+                        sorted = items.sort(function(a,b) {
+                            var x= a['title'].toLowerCase(),
+                            y = b['title'].toLowerCase();
+                            return x<y ? -1 : x>y ? 1 : 0;
+                        });
+                        break;
+                    case 'price':
+                        if(order.direction == 'asc'){
+                            sorted = items.sort(function(a,b){
+                                var x= parseInt(a['price']),
+                                y = parseInt(b['price']);
+                                return x<y ? -1 : x>y ? 1 : 0 && a['available'] < b['available'];
+                            });
+                        }else if(order.direction == 'desc'){
+                            sorted = items.sort(function (a,b){
+                                var x= parseInt(a['price']),
+                                y = parseInt(b['price']);
+                                return x<y ? -1 : x>y ? 1 : 0;
+                            });
+                            sorted.reverse();
+                        }
+                        break;
+                    default : 
+                    sorted = items.sort(function(a,b) {
+                        var x= a['title'].toLowerCase(),
+                        y = b['title'].toLowerCase();
+                        return x<y ? -1 : x>y ? 1 : 0;
+                    });
+                    break;    
+                }
+            });
+
+            unavailables.map((value) => sorted.push(value));
+
+            callback(sorted);
+        });
+        return query;
+    }
+
     static getItemById = (nodePath,id,callback) => {
         let query = firebaseDatabase.ref(nodePath+'/'+id);
         query.on('value', dataSnapshot => {

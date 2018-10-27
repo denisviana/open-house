@@ -79,12 +79,12 @@ class Welcome extends Component{
 
         return(
            <div>
-                <div style={{position:'absolute', top:'0', left:'left', height:'100vh', width:'100%', background:'#fbc531'}}>
+                <div style={{background:'#fbc531'}}>
                     <Grid container
                     direction="row"
                     justify="center"
                     alignItems="center"
-                    style={{height:"100%"}}>
+                    style={{height:"100vh"}}>
                         <Grid item xs="12" container
                     direction="row"
                     justify="center"

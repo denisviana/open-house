@@ -24,6 +24,8 @@ import { withRouter } from 'react-router-dom'
 import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
 import Typography from '@material-ui/core/Typography';
+import MenuIcon from '@material-ui/icons/Menu';
+import Hidden from '@material-ui/core/Hidden';
 
 const styles = theme => ({
     badge: {
@@ -147,8 +149,19 @@ class Navbar extends Component{
 
         return(
             <div>
-                <AppBar>
+                <AppBar className={this.props.className}>
                     <Toolbar className="navbar-main">
+                        <Hidden mdUp implementation="css">
+                        <IconButton
+                            color="inherit"
+                            aria-label="Open drawer"
+                            onClick={this.props.onMenuClick}
+                            className={{
+                                marginRight: 20,
+                            }} style={{zIndex: 4}}>
+                            <MenuIcon />
+                        </IconButton>
+                        </Hidden>
                         <Grid container alignItems="center" className="navbar-main" style={{position: 'fixed'}}>
                             <Grid item xs="12">
                                 <a className="navbar-title">Open House</a>
