@@ -224,7 +224,7 @@ class Home extends Component {
                                 </CardActionArea>
                                 <CardActions style={{ justifyContent: 'left' }}>
                                     <PrimaryButton variant="contained" disabled={!item.available} onClick={() => this.addProductToCart(item)} label="Selecionar" />
-                                    <SecondaryButton label="Loja" disabled={!item.available} style={{ marginRight: 10 }} />
+                                    <SecondaryButton label="Loja" disabled={!item.available} style={{ marginRight: 10 }} href={item.storeUrl} />
                                 </CardActions>
                             </div>
                         </Card>
