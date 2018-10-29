@@ -159,7 +159,7 @@ class Navbar extends Component{
                             className={{
                                 marginRight: 20,
                             }} style={{zIndex: 4}}>
-                            <MenuIcon />
+                            <MenuIcon style={{color:'#FFFFFF'}}/>
                         </IconButton>
                         </Hidden>
                         <Grid container alignItems="center" className="navbar-main" style={{position: 'fixed'}}>

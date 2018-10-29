@@ -142,11 +142,11 @@ class Home extends Component {
 
     componentWillMount(){
 
-        if(!FirebaseService.auth().currentUser){
+        /*if(!FirebaseService.auth().currentUser){
             this.props.history.push('/notfound')
             console.log("User not logged in")
         }else
-            console.log("User logged in")
+            console.log("User logged in")*/
 
     }
 
