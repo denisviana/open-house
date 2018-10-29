@@ -397,16 +397,10 @@ class Home extends Component {
                                     <ListItemText primary="Decoração" onClick={(e) => this.onCategoryClicked(e.target.innerText)}/>
                                 </ListItem>
                                 <ListItem button>
-                                    <ListItemText primary="Quarto" onClick={(e) => this.onCategoryClicked(e.target.innerText)}/>
-                                </ListItem>
-                                <ListItem button>
                                     <ListItemText primary="Limpeza" onClick={(e) => this.onCategoryClicked(e.target.innerText)}/>
                                 </ListItem>
                                 <ListItem button>
                                     <ListItemText primary="Utilidades" onClick={(e) => this.onCategoryClicked(e.target.innerText)}/>
-                                </ListItem>
-                                <ListItem button>
-                                    <ListItemText primary="Sala" onClick={(e) => this.onCategoryClicked(e.target.innerText)}/>
                                 </ListItem>
                             </List>
                     </Hidden>

@@ -71,9 +71,6 @@ class Add extends Component{
 
         const environments = [
             {
-                label: 'Sala',
-            },
-            {
                 label: 'Cozinha',
             },
             {
@@ -87,9 +84,6 @@ class Add extends Component{
             },
             {
                 label: 'Decoração',
-            },
-            {
-                label: 'Quarto',
             },
             {
                 label: 'Limpeza',
