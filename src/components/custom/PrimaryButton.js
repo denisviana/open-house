@@ -34,6 +34,7 @@ class PrimaryButton extends Component {
       raised={true} 
       style={this.props.style} 
       onClick={this.props.onClick}
+      disabled={this.props.disabled}
       classes={{ root: classes.root, label: classes.label }}
       >{this.props.label}
     </Button>; 
