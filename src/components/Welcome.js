@@ -161,7 +161,7 @@ class Welcome extends Component{
                 </DialogContent>
                 <DialogActions>
                     <SecondaryButton label="Voltar" onClick={() => this.handleCloseDialog()}/>
-                    <PrimaryButton label="Pronto" disabled={(this.state.email.match("[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,3}$"))} component={Link} to={{pathname : "/home/"+this.state.uid, 
+                    <PrimaryButton label="Pronto" disabled={!(this.state.email.match("[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,3}$"))} component={Link} to={{pathname : "/home/"+this.state.uid, 
                     param1 : this.state.email,
                     param2 : this.state.name}}/>
             </DialogActions>
