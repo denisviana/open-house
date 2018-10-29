@@ -84,7 +84,7 @@ class Welcome extends Component{
                     direction="row"
                     justify="center"
                     alignItems="center"
-                    style={{height:"100vh"}}>
+                    style={{minHeight: '100vh', overflow: 'hidden'}}>
                         <Grid item xs="12" container
                     direction="row"
                     justify="center"
