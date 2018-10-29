@@ -136,7 +136,7 @@ class Welcome extends Component{
                             margin="normal"
                             variant="outlined"
                             className='input-field' 
-                            type='email' 
+                            type='text' 
                             label='Nome'
                         ></TextField>
                         <TextField
@@ -147,6 +147,7 @@ class Welcome extends Component{
                             type='email' 
                             label='E-mail'
                             required
+                            pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,3}$"
                         ></TextField>
                 </div>
                 </DialogContent>
