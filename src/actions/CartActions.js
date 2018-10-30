@@ -34,10 +34,10 @@ var CartActions = {
         });
     },
 
-    removeItemFromCart : function(item){
+    removeItemFromCart : function(key){
         AppDispatcher.handleAction({
             actionType : CartConstants.CART_REMOVE,
-            item : item
+            itemKey : key
         });
     }
 

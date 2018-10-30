@@ -14,6 +14,7 @@ import Slide from '@material-ui/core/Slide';
 import FirebaseService from '../services/FirebaseServices';
 import TextField from '@material-ui/core/TextField';
 import { Link } from 'react-router-dom'
+import { callbackify } from 'util';
 
 
 function Transition(props) {
@@ -79,16 +80,17 @@ class Welcome extends Component{
 
         return(
            <div>
-                <div style={{background:'#fbc531'}}>
+                <div style={{background:'#fbc531', height: '100vh', overflow: 'hidden'}}>
                     <Grid container
                     direction="row"
                     justify="center"
                     alignItems="center"
-                    style={{height:"100vh"}}>
+                    style={{height: '100%'}}>
+
                         <Grid item xs="12" container
-                    direction="row"
-                    justify="center"
-                    alignItems="center">
+                            direction="row"
+                            justify="center"
+                            alignItems="center">
                             <Grid item xs="10" sm="7" md="4" lg="4" style={{paddingTop:20,paddingBottom:20}}>
                                 <Typography variant='h2' style={{color: "#fff", fontFamily:'QuickSand'}}>
                                     Open House
@@ -118,6 +120,7 @@ class Welcome extends Component{
                         </Grid>
                     </Grid>
             </div>
+
             <Dialog
             TransitionComponent={Transition}
             keepMounted
@@ -157,6 +160,7 @@ class Welcome extends Component{
                     param2 : this.state.name}}/>
             </DialogActions>
             </Dialog>
+        
            </div>
         );
     }

@@ -1,26 +1,42 @@
 import AppDispatcher from '../../dispatcher/AppDispatcher';
 import CartConstants from '../../constants/CartConstants';
-import FirebaseService from '../../services/FirebaseServices';
 var EventEmmiter = require('events').EventEmitter;
 var _ = require('underscore');
 
 var _products = [], _cartVisibile = false;
 var _userEmail = "";
 var _userName = "";
+var _itemKey= "";
+var _lastItemAdded = null;
 
 function add(item, update, userEmail, userName){
+
+    if(_products.includes(item)){
+        CartStore.emitItemAlreadyExists();
+        return;
+    }
+
+    _lastItemAdded = item;
     _products.push(item);
     _userEmail = userEmail;
     _userName = userName;
-    console.log(userEmail);
+    CartStore.emitChange();
+    CartStore.emitItemAddedSuccessful();
 }
 
 function setCartVisible(cartVisibile){
     _cartVisibile = cartVisibile;
 }
 
-function removeItem(item){
-    delete _products[item];
+function removeItem(key){
+    _itemKey = key;
+    console.log("Removing item from cart: "+key);
+    let aux = _products;
+    let index = aux.findIndex(function(i){
+        return i.key === key
+    });
+
+    if(index != -1) _products = aux.splice(index,1);
 }
 
 var CartStore = _.extend({}, EventEmmiter.prototype,{
@@ -34,12 +50,59 @@ var CartStore = _.extend({}, EventEmmiter.prototype,{
         return Object.keys(_products).length;
     },
 
+    getLastItemAdded : function(){
+        return _lastItemAdded;
+    },
+
     getCartVisible : function(){
         return _cartVisibile;
     },
 
+    getItemKeyRemoved : function(){
+        return _itemKey;
+    },
+
     emitChange : function(){
         this.emit('change');
+    },
+
+    emitItemRemoved : function(){
+        console.log("Emiting item removed");
+        this.emit('remove');
+    },
+
+    emitItemAlreadyExists : function(){
+        console.log("Item already exists");
+        this.emit("already_exists");
+    },
+
+    emitItemAddedSuccessful : function(){
+        console.log("Item added");
+        this.emit('item_added');
+    },
+
+    addOnItemAddedSuccessful : function(callback){
+        this.on('item_added',callback);
+    },
+
+    removeOnItemAddedSuccessful : function(callback){
+        this.remove('item_added',callback);
+    },
+
+    addAlreadyExistsListener : function(callback){
+        this.on('already_exists',callback);
+    },
+
+    removeAlreadyExistsListener : function(callback){
+        this.remove('already_exists',callback);
+    },
+
+    addOnRemoveItemFromCartListener : function (callback) {
+        this.on('remove', callback);
+    },
+
+    removeOnRemoveItemFromCartListener : function (callback) {
+        this.removeListener('remove', callback);
     },
 
     addChangeListener: function(callback) {
@@ -67,15 +130,14 @@ AppDispatcher.register(function(payload) {
                 break;
         
             case CartConstants.CART_REMOVE:
-                removeItem(action.item);
+                removeItem(action.itemKey);
+                CartStore.emitItemRemoved();
                 break;
         
             default:
                 return true;
         }
-  
-    CartStore.emitChange();
-  
+    
     return true;
   
   });

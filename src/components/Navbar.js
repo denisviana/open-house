@@ -26,6 +26,7 @@ import Toolbar from '@material-ui/core/Toolbar';
 import Typography from '@material-ui/core/Typography';
 import MenuIcon from '@material-ui/icons/Menu';
 import Hidden from '@material-ui/core/Hidden';
+import CartActions from '../actions/CartActions';
 
 const styles = theme => ({
     badge: {
@@ -123,6 +124,10 @@ class Navbar extends Component{
         if(index != -1) itens.splice(index,1);
         let count = itens.length;
         this.setState({itemsCart : itens, counter : count});
+        CartActions.removeItemFromCart(key);
+
+        if(count == 0)
+            this.handleCloseDialog();
 
     }
 
@@ -208,6 +213,7 @@ class Navbar extends Component{
                         <DialogContent>
                         <Divider/>
                             <div style={{width:"100%"}}>
+                                {this.state.itemsCart.length > 0 ? 
                                 <List>
                                     {
                                         this.state.itemsCart.map((value,index) => 
@@ -233,6 +239,9 @@ class Navbar extends Component{
                                         )
                                     }
                                 </List>
+                                : 
+                                <Typography style={{padding:20}}>Nenhum ítem no carrinho ainda.</Typography>
+                                }
                             </div>
                         </DialogContent>
                         <DialogActions>

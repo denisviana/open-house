@@ -149,25 +149,32 @@ class Home extends Component {
             this.setState({ items: dataReceived }))
 
         CartStore.addChangeListener(this._onChange);
+        CartStore.addAlreadyExistsListener(this._onItemAlreadyExists);
+        CartStore.addOnItemAddedSuccessful(this._onItemAddedSuccessful);
+    }
 
+    componentWillUnmount() {
+        CartStore.removeChangeListener(this._onChange);
+        CartStore.removeAlreadyExistsListener(this._onItemAlreadyExists);
+        CartStore.removeOnItemAddedSuccessful(this._onItemAddedSuccessful);
+    }
+
+    _onItemAlreadyExists = () => {
+        this.setState({ snackMsg: "Ops, já existe um item igual adicionado no carrinho.", openSnack: true });
+    }
+
+    _onItemAddedSuccessful = () => {
+        let item = CartStore.getLastItemAdded();
+        this.setState({ snackMsg: item.title + " adicionado no carrinho.", openSnack: true, itemsCart: itemsInCart });
     }
 
     _onChange = () => {
         let items = [];
         items = CartStore.getCartItems();
-        this.setState({ itemsCart: items })
-    }
-
-    componentWillUnmount() {
-        CartStore.removeChangeListener(this._onChange);
+        this.setState({ itemsCart: items });
     }
 
     addProductToCart(item) {
-
-        if (this.state.itemsCart.includes(item)) {
-            this.setState({ snackMsg: "Ops, já existe um item igual adicionado no carrinho.", openSnack: true });
-            return;
-        }
 
         var update = {
             name: 'name'
@@ -178,7 +185,6 @@ class Home extends Component {
         itemsInCart.push(item);
         CartActions.addToCart(item, update, email, name);
         CartActions.updateCartVisible(true);
-        this.setState({ snackMsg: item.title + " adicionado no carrinho.", openSnack: true, itemsCart: itemsInCart });
     }
 
     updateUi = () => {
