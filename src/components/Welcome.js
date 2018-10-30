@@ -33,6 +33,12 @@ class Welcome extends Component{
         }
     }
 
+    submit = (event) => {
+        event.preventDefault();
+
+
+    }
+
     componentWillMount(){
 
         FirebaseService.auth().onAuthStateChanged((user) => {
@@ -85,8 +91,7 @@ class Welcome extends Component{
                     direction="row"
                     justify="center"
                     alignItems="center"
-                    style={{height: '100%'}}>
-
+                    style={{minHeight: '100vh', overflow: 'hidden'}}>
                         <Grid item xs="12" container
                             direction="row"
                             justify="center"
@@ -120,7 +125,6 @@ class Welcome extends Component{
                         </Grid>
                     </Grid>
             </div>
-
             <Dialog
             TransitionComponent={Transition}
             keepMounted
@@ -139,8 +143,9 @@ class Welcome extends Component{
                             margin="normal"
                             variant="outlined"
                             className='input-field' 
-                            type='email' 
+                            type='text' 
                             label='Nome'
+                            autoCapitalize="true"
                         ></TextField>
                         <TextField
                             onChange={this.handleChange('email')}
@@ -150,12 +155,13 @@ class Welcome extends Component{
                             type='email' 
                             label='E-mail'
                             required
+                            pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,3}$"
                         ></TextField>
                 </div>
                 </DialogContent>
                 <DialogActions>
                     <SecondaryButton label="Voltar" onClick={() => this.handleCloseDialog()}/>
-                    <PrimaryButton label="Pronto"  component={Link} to={{pathname : "/home/"+this.state.uid, 
+                    <PrimaryButton label="Pronto" disabled={!(this.state.email.match("[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,3}$"))} component={Link} to={{pathname : "/home/"+this.state.uid, 
                     param1 : this.state.email,
                     param2 : this.state.name}}/>
             </DialogActions>

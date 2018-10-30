@@ -23,6 +23,7 @@ import Navbar from '../components/Navbar';
 import ListSubHeader from '@material-ui/core/ListSubheader';
 import Drawer from '@material-ui/core/Drawer';
 import { withStyles } from '@material-ui/core/styles';
+import { withRouter } from 'react-router-dom'
 import Hidden from '@material-ui/core/Hidden';
 
 
@@ -137,6 +138,16 @@ class Home extends Component {
     getItemById(id) {
         FirebaseService.getItemById('products', id, (dataReceived) =>
             console.log(dataReceived['isSelected']))
+    }
+
+    componentWillMount(){
+
+        /*if(!FirebaseService.auth().currentUser){
+            this.props.history.push('/notfound')
+            console.log("User not logged in")
+        }else
+            console.log("User logged in")*/
+
     }
 
     componentDidMount() {
@@ -287,7 +298,7 @@ class Home extends Component {
                 <Hidden smDown implementation="css">
                 <Drawer className={classes.drawer}
                 ModalProps={{
-                    keepMounted: true, // Better open performance on mobile.
+                    keepMounted: true,
                   }}
                     variant="temporary"
                     anchor='left'
@@ -440,4 +451,4 @@ class Home extends Component {
     }
 }
 
-export default withStyles(styles)(withWidth()(Home));
+export default withRouter(withStyles(styles)(withWidth()(Home)));
