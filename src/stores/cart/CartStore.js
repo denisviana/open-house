@@ -86,7 +86,7 @@ var CartStore = _.extend({}, EventEmmiter.prototype,{
     },
 
     removeOnItemAddedSuccessful : function(callback){
-        this.remove('item_added',callback);
+        this.removeListener('item_added',callback);
     },
 
     addAlreadyExistsListener : function(callback){
@@ -94,7 +94,7 @@ var CartStore = _.extend({}, EventEmmiter.prototype,{
     },
 
     removeAlreadyExistsListener : function(callback){
-        this.remove('already_exists',callback);
+        this.removeListener('already_exists',callback);
     },
 
     addOnRemoveItemFromCartListener : function (callback) {
